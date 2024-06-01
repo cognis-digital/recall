@@ -36,3 +36,4 @@
 2025-10-06T10:12:12  chore: routine maintenance
 2026-01-26T17:29:19  docs: clarify usage notes
 2026-03-09T12:46:26  test: add edge case
+2024-06-01T14:42:42  fix(scan): add a regression fixture
