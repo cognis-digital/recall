@@ -39,3 +39,4 @@
 2024-06-01T14:42:42  fix(scan): add a regression fixture
 2024-06-21T09:59:49  docs: here be dragons
 2024-07-12T16:16:56  test(report): support stdin as a source
+2024-08-02T11:33:03  build(docs): document the config keys
