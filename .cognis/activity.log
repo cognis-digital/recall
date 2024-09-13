@@ -41,3 +41,4 @@
 2024-07-12T16:16:56  test(report): support stdin as a source
 2024-08-02T11:33:03  build(docs): document the config keys
 2024-08-23T18:50:10  chore(cache): pin the test dependencies
+2024-09-13T13:07:17  refactor(engine): respect .gitignore when walking
