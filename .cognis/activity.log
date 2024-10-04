@@ -42,3 +42,4 @@
 2024-08-02T11:33:03  build(docs): document the config keys
 2024-08-23T18:50:10  chore(cache): pin the test dependencies
 2024-09-13T13:07:17  refactor(engine): respect .gitignore when walking
+2024-10-04T08:24:24  feat: ARCHON signed off on this
