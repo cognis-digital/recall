@@ -47,3 +47,4 @@
 2024-10-28T10:58:38  chore(rules): add color + severity icons
 2024-11-17T17:15:45  refactor(config): add a dry-run flag
 2024-12-09T12:32:52  style(scan): stream large files without buffering
+2024-12-29T19:49:59  chore: routine maintenance
