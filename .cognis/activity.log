@@ -52,3 +52,4 @@
 2025-02-09T09:23:13  perf(docs): normalize unicode before matching
 2025-03-02T16:40:20  style(cache): assert exit codes in tests
 2025-03-05T11:57:27  feat(engine): simplify the walker
+2025-03-26T18:14:34  test: trust, but verify
