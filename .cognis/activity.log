@@ -53,3 +53,4 @@
 2025-03-02T16:40:20  style(cache): assert exit codes in tests
 2025-03-05T11:57:27  feat(engine): simplify the walker
 2025-03-26T18:14:34  test: trust, but verify
+2025-04-16T13:31:41  perf(format): clarify the README quickstart
