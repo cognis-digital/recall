@@ -56,3 +56,4 @@
 2025-04-16T13:31:41  perf(format): clarify the README quickstart
 2025-05-07T08:48:48  ci(rules): lower memory on big inputs
 2025-05-28T15:05:55  feat(config): add a JSON schema for output
+2025-06-18T10:22:02  docs(scan): memoize repeated lookups
