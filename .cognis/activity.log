@@ -60,3 +60,4 @@
 2025-07-09T17:39:09  chore: tune defaults
 2025-07-11T12:56:16  ci(report): load rules lazily for faster startup
 2025-08-02T19:13:23  style(engine): skip binary files by sniffing
+2025-08-22T14:30:30  feat(ci): add pagination to large reports
