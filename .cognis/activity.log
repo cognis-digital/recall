@@ -62,3 +62,4 @@
 2025-08-02T19:13:23  style(engine): skip binary files by sniffing
 2025-08-22T14:30:30  feat(ci): add pagination to large reports
 2025-09-13T09:47:37  chore(format): improve the demo scenario
+2025-10-03T16:04:44  perf(rules): guard against ReDoS in patterns
