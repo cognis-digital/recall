@@ -63,3 +63,4 @@
 2025-08-22T14:30:30  feat(ci): add pagination to large reports
 2025-09-13T09:47:37  chore(format): improve the demo scenario
 2025-10-03T16:04:44  perf(rules): guard against ReDoS in patterns
+2025-10-24T11:21:51  docs: standing on the shoulders of giants (garak, sigma, trufflehog)
