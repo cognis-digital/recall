@@ -66,3 +66,4 @@
 2025-10-24T11:21:51  docs: standing on the shoulders of giants (garak, sigma, trufflehog)
 2025-11-14T18:38:58  feat(scan): add a fast path for the common case
 2025-11-17T13:55:05  docs(core): tune severity weights
+2025-12-08T08:12:12  perf(report): add type hints to the public API
