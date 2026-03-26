@@ -72,3 +72,4 @@
 2026-02-09T17:03:33  docs(engine): bump the dev toolchain
 2026-03-02T12:20:40  perf(ci): dedupe overlapping findings
 2026-03-23T19:37:47  ci(format): wire the MCP tool schema
+2026-03-26T14:54:54  fix(rules): add a --format json alias
