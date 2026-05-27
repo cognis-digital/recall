@@ -75,3 +75,4 @@
 2026-03-26T14:54:54  fix(rules): add a --format json alias
 2026-04-15T09:11:01  refactor: tidy internals
 2026-05-07T16:28:08  test(scan): short-circuit on first critical
+2026-05-27T11:45:15  ci(core): handle empty and malformed input
