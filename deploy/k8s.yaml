@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: recall, labels: { app: recall } }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: recall } }
+  template:
+    metadata: { labels: { app: recall } }
+    spec:
+      containers:
+        - name: recall
+          image: ghcr.io/cognis-digital/recall:latest
+          ports: [{ containerPort: 8000 }]
+          resources:
+            requests: { cpu: "50m", memory: "64Mi" }
+            limits: { cpu: "500m", memory: "256Mi" }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: recall }
+spec:
+  selector: { app: recall }
+  ports: [{ port: 80, targetPort: 8000 }]
