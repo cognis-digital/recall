@@ -1,0 +1,10 @@
+{
+  "name": "@cognis/recall",
+  "version": "0.2.0",
+  "description": "JavaScript port of recall (Cognis Neural Suite)",
+  "bin": {
+    "recall": "index.js"
+  },
+  "license": "LicenseRef-COCL-1.0",
+  "type": "module"
+}
