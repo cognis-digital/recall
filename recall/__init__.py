@@ -1,11 +1,28 @@
-"""
-RECALL — Privacy-first local RAG over personal data — encrypted, audit-logged
-Part of the Cognis Neural Suite by Cognis Digital.
-https://cognis.digital · MIT License
-"""
-from recall.core import scan, TOOL_NAME, TOOL_VERSION
+"""RECALL - Privacy-first local RAG over personal data.
 
-__version__ = TOOL_VERSION
-__author__ = "Cognis Digital"
-__license__ = "MIT"
-__all__ = ["scan", "TOOL_NAME", "TOOL_VERSION", "__version__"]
+Encrypted at rest, audit-logged, zero-dependency. All retrieval happens
+locally; no data ever leaves the machine. Documents are stored in an
+encrypted vault (scrypt-derived key + AES-CTR via stdlib AES emulation in
+pure Python is heavy, so we use a hardened keystream cipher + HMAC).
+Every read/query is appended to a tamper-evident audit log.
+"""
+from .core import (
+    Vault,
+    AuditLog,
+    relevant,
+    add_document,
+    derive_key,
+)
+
+TOOL_NAME = "recall"
+TOOL_VERSION = "1.0.0"
+
+__all__ = [
+    "Vault",
+    "AuditLog",
+    "relevant",
+    "add_document",
+    "derive_key",
+    "TOOL_NAME",
+    "TOOL_VERSION",
+]

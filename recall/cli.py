@@ -1,14 +1,128 @@
-"""RECALL command-line interface."""
-from cognis_core import build_cli
-from recall.core import scan, TOOL_NAME, TOOL_VERSION
+"""Command-line interface for RECALL.
 
-main = build_cli(
-    tool_name=TOOL_NAME,
-    tool_version=TOOL_VERSION,
-    description="Privacy-first local RAG over personal data — encrypted, audit-logged",
-    scan_fn=scan,
-)
+Subcommands:
+  relevant   Retrieve the most relevant documents for a query.
+  add        Add a document to the encrypted vault.
+  audit      Show / verify the tamper-evident audit log.
+
+Global: --version, --format {table,json}.
+Passphrase comes from --passphrase or the RECALL_PASSPHRASE env var.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import sys
+from typing import List, Optional
+
+from . import TOOL_NAME, TOOL_VERSION
+from .core import AuditLog, Vault, relevant
+
+
+def _passphrase(args) -> str:
+    pw = args.passphrase or os.environ.get("RECALL_PASSPHRASE")
+    if not pw:
+        raise SystemExit("error: passphrase required (--passphrase or RECALL_PASSPHRASE)")
+    return pw
+
+
+def _emit(obj, fmt: str) -> None:
+    if fmt == "json":
+        print(json.dumps(obj, indent=2, sort_keys=True))
+        return
+    # table
+    if isinstance(obj, list):
+        if not obj:
+            print("(no results)")
+            return
+        cols = ["score", "id", "title", "snippet"]
+        if cols[0] not in obj[0]:
+            cols = list(obj[0].keys())
+        widths = {c: len(c) for c in cols}
+        for row in obj:
+            for c in cols:
+                widths[c] = max(widths[c], len(str(row.get(c, ""))[:60]))
+        header = "  ".join(c.ljust(widths[c]) for c in cols)
+        print(header)
+        print("  ".join("-" * widths[c] for c in cols))
+        for row in obj:
+            print("  ".join(str(row.get(c, ""))[:60].ljust(widths[c]) for c in cols))
+    else:
+        for k, v in obj.items():
+            print(f"{k}: {v}")
+
+
+def _cmd_relevant(args) -> int:
+    pw = _passphrase(args)
+    results = relevant(args.vault, pw, args.query, k=args.k)
+    _emit(results, args.format)
+    return 0 if results else 1
+
+
+def _cmd_add(args) -> int:
+    pw = _passphrase(args)
+    text = args.text
+    if args.file:
+        with open(args.file, "r", encoding="utf-8") as fh:
+            text = fh.read()
+    if not text:
+        raise SystemExit("error: provide --text or --file")
+    doc = Vault(args.vault, pw).add(args.title, text, args.tag)
+    _emit({"id": doc.id, "title": doc.title, "chars": len(text)}, args.format)
+    return 0
+
+
+def _cmd_audit(args) -> int:
+    log = AuditLog(args.vault + ".audit")
+    intact = log.verify()
+    if args.format == "json":
+        _emit({"intact": intact, "entries": log.entries()}, "json")
+    else:
+        print(f"chain intact: {intact}")
+        for e in log.entries():
+            print(f"{e['ts']:.0f}  {e['action']:<8}  {json.dumps(e['detail'])}")
+    return 0 if intact else 2
+
+
+def build_parser() -> argparse.ArgumentParser:
+    p = argparse.ArgumentParser(
+        prog=TOOL_NAME, description="Privacy-first local RAG over personal data."
+    )
+    p.add_argument("--version", action="version", version=f"{TOOL_NAME} {TOOL_VERSION}")
+    p.add_argument("--format", choices=["table", "json"], default="table")
+    p.add_argument("--vault", default=os.environ.get("RECALL_VAULT", "recall.vault"))
+    p.add_argument("--passphrase", default=None)
+    sub = p.add_subparsers(dest="cmd", required=True)
+
+    r = sub.add_parser("relevant", help="retrieve most relevant documents")
+    r.add_argument("query")
+    r.add_argument("-k", type=int, default=5)
+    r.set_defaults(func=_cmd_relevant)
+
+    a = sub.add_parser("add", help="add a document to the vault")
+    a.add_argument("title")
+    a.add_argument("--text", default="")
+    a.add_argument("--file", default=None)
+    a.add_argument("--tag", action="append", default=[])
+    a.set_defaults(func=_cmd_add)
+
+    au = sub.add_parser("audit", help="show / verify the audit log")
+    au.set_defaults(func=_cmd_audit)
+    return p
+
+
+def main(argv: Optional[List[str]] = None) -> int:
+    parser = build_parser()
+    args = parser.parse_args(argv)
+    try:
+        return args.func(args)
+    except SystemExit:
+        raise
+    except Exception as exc:  # noqa: BLE001 - surface as non-zero exit
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+
 
 if __name__ == "__main__":
-    import sys
-    sys.exit(main())
+    raise SystemExit(main())

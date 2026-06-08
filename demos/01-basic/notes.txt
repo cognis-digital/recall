@@ -1,0 +1,7 @@
+Home WiFi network eero-mesh password is hunter2-greenway, subnet 192.168.68.0/22
+---
+Alpaca paper trading API key lives on the Samsung T7 SSD under alpha-trade-deck/.env
+---
+Annual physical with Dr. Okafor scheduled for June 30, bring insurance card
+---
+Brave bookmarks sync is on; reorganize via HTML import, not direct file swap
