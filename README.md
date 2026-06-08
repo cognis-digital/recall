@@ -36,7 +36,9 @@ Privacy-first local RAG over personal data — encrypted, audit-logged — witho
 <a name="features"></a>
 ## Features
 
-- ✅ Scan
+- ✅ Derive Key
+- ✅ Add Document
+- ✅ Relevant
 - ✅ Runs on Linux/macOS/Windows · Docker · devcontainer
 - ✅ Ports in Python, JavaScript, Go, and Rust (`ports/`)
 
