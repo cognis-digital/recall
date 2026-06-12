@@ -16,7 +16,7 @@
 </div>
 
 ```bash
-pip install cognis-recall
+pip install "git+https://github.com/cognis-digital/recall.git"
 recall scan .            # → prioritized findings in seconds
 ```
 
@@ -48,7 +48,7 @@ Privacy-first local RAG over personal data — encrypted, audit-logged — witho
 ## Quick start
 
 ```bash
-pip install cognis-recall
+pip install "git+https://github.com/cognis-digital/recall.git"
 recall --version
 recall scan .                       # scan current project
 recall scan . --format json         # machine-readable
