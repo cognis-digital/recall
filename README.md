@@ -20,6 +20,12 @@ pip install "git+https://github.com/cognis-digital/recall.git"
 recall scan .            # → prioritized findings in seconds
 ```
 
+<!-- cognis:layman:start -->
+## What is this?
+
+Recall is a personal document vault you run entirely on your own computer — nothing leaves your machine. You give it a passphrase, drop in notes, emails, or any text you want to save, and it encrypts everything so only you can read it. When you want to find something later, you ask a question in plain English and it returns the most relevant documents from your vault. Every time you add or search, Recall writes a tamper-evident log so you can always verify that no one has touched your files.
+<!-- cognis:layman:end -->
+
 ## Contents
 
 - [Why recall?](#why) · [Features](#features) · [Quick start](#quick-start) · [Example](#example) · [Architecture](#architecture) · [AI stack](#ai-stack) · [How it compares](#how-it-compares) · [Integrations](#integrations) · [Install anywhere](#install-anywhere) · [Related](#related) · [Contributing](#contributing)
@@ -45,6 +51,42 @@ Privacy-first local RAG over personal data — encrypted, audit-logged — witho
 <div align="right"><a href="#top">↑ back to top</a></div>
 
 <a name="quick-start"></a>
+<!-- cognis:install:start -->
+## Install
+
+`recall` is source-available (not published to PyPI) — every method below installs
+straight from GitHub. Pick whichever you prefer; the one-line scripts auto-detect
+the best tool available on your machine.
+
+**One-liner (Linux / macOS):**
+```sh
+curl -fsSL https://raw.githubusercontent.com/cognis-digital/recall/HEAD/install.sh | sh
+```
+
+**One-liner (Windows PowerShell):**
+```powershell
+irm https://raw.githubusercontent.com/cognis-digital/recall/HEAD/install.ps1 | iex
+```
+
+**Or install manually — any one of:**
+```sh
+pipx install "git+https://github.com/cognis-digital/recall.git"     # isolated (recommended)
+uv tool install "git+https://github.com/cognis-digital/recall.git"  # uv
+pip install "git+https://github.com/cognis-digital/recall.git"      # pip
+```
+
+**From source:**
+```sh
+git clone https://github.com/cognis-digital/recall.git
+cd recall && pip install .
+```
+
+Then run:
+```sh
+recall --help
+```
+<!-- cognis:install:end -->
+
 ## Quick start
 
 ```bash
