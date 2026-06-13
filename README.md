@@ -20,6 +20,40 @@ pip install cognis-recall
 recall scan .            # → prioritized findings in seconds
 ```
 
+## Usage — step by step
+
+1. **Install** (Python 3.9+):
+
+   ```bash
+   pip install recall            # or: pipx install recall
+   ```
+
+2. **Add documents to your encrypted vault.** Provide a title plus inline text or a file, and optional tags. The vault path defaults to `recall.vault` (override with `--vault` or `RECALL_VAULT`):
+
+   ```bash
+   recall add "Q1 notes" --file notes.md --tag work --tag planning
+   ```
+
+3. **Retrieve the most relevant documents** for a query (`-k` controls how many):
+
+   ```bash
+   recall relevant "runway and burn rate" -k 5
+   ```
+
+4. **Get machine-readable output** for piping into another tool:
+
+   ```bash
+   recall --format json relevant "runway and burn rate" -k 3
+   ```
+
+5. **Read the result.** `relevant` returns the top-k matching documents ranked by relevance; everything stays local and encrypted in the vault.
+
+6. **Verify integrity** via the tamper-evident audit log:
+
+   ```bash
+   recall audit
+   ```
+
 ## Contents
 
 - [Why recall?](#why) · [Features](#features) · [Quick start](#quick-start) · [Example](#example) · [Architecture](#architecture) · [AI stack](#ai-stack) · [How it compares](#how-it-compares) · [Integrations](#integrations) · [Install anywhere](#install-anywhere) · [Related](#related) · [Contributing](#contributing)
