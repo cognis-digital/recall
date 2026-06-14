@@ -36,3 +36,6 @@ recall = "recall.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["recall"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
