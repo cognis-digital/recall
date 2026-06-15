@@ -64,8 +64,15 @@ def _cmd_add(args) -> int:
     pw = _passphrase(args)
     text = args.text
     if args.file:
-        with open(args.file, "r", encoding="utf-8") as fh:
-            text = fh.read()
+        if not os.path.isfile(args.file):
+            print(f"error: file not found: {args.file!r}", file=sys.stderr)
+            return 2
+        try:
+            with open(args.file, "r", encoding="utf-8") as fh:
+                text = fh.read()
+        except OSError as exc:
+            print(f"error: cannot read file {args.file!r}: {exc}", file=sys.stderr)
+            return 2
     if not text:
         raise SystemExit("error: provide --text or --file")
     doc = Vault(args.vault, pw).add(args.title, text, args.tag)
@@ -85,6 +92,17 @@ def _cmd_audit(args) -> int:
     return 0 if intact else 2
 
 
+
+def _positive_int(value: str) -> int:
+    """argparse type: integer that must be >= 1."""
+    try:
+        n = int(value)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"{value!r} is not a valid integer")
+    if n < 1:
+        raise argparse.ArgumentTypeError(f"k must be at least 1, got {n}")
+    return n
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog=TOOL_NAME, description="Privacy-first local RAG over personal data."
@@ -97,7 +115,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     r = sub.add_parser("relevant", help="retrieve most relevant documents")
     r.add_argument("query")
-    r.add_argument("-k", type=int, default=5)
+    r.add_argument("-k", type=_positive_int, default=5, metavar="K",
+                   help="number of results to return (default: 5)")
     r.set_defaults(func=_cmd_relevant)
 
     a = sub.add_parser("add", help="add a document to the vault")

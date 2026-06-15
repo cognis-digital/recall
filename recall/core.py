@@ -103,8 +103,12 @@ class AuditLog:
         with open(self.path, "r", encoding="utf-8") as fh:
             for line in fh:
                 line = line.strip()
-                if line:
+                if not line:
+                    continue
+                try:
                     last = json.loads(line)["hash"]
+                except (json.JSONDecodeError, KeyError):
+                    continue
         return last
 
     def append(self, action: str, detail: Dict) -> str:
@@ -131,10 +135,15 @@ class AuditLog:
                 line = line.strip()
                 if not line:
                     continue
-                entry = json.loads(line)
-                if entry["prev"] != prev:
+                try:
+                    entry = json.loads(line)
+                except json.JSONDecodeError:
                     return False
-                stored = entry.pop("hash")
+                if entry.get("prev") != prev:
+                    return False
+                stored = entry.pop("hash", None)
+                if stored is None:
+                    return False
                 payload = json.dumps(entry, sort_keys=True).encode("utf-8")
                 calc = hashlib.sha256(prev.encode() + payload).hexdigest()
                 if calc != stored:
@@ -149,8 +158,12 @@ class AuditLog:
         with open(self.path, "r", encoding="utf-8") as fh:
             for line in fh:
                 line = line.strip()
-                if line:
+                if not line:
+                    continue
+                try:
                     out.append(json.loads(line))
+                except json.JSONDecodeError:
+                    continue
         return out
 
 
@@ -181,6 +194,8 @@ class Vault:
             return
         with open(self.path, "rb") as fh:
             raw = fh.read()
+        if len(raw) < 20:
+            raise ValueError("vault file is too short to be valid")
         if raw[:4] != _MAGIC:
             raise ValueError("not a RECALL vault file")
         self._salt = raw[4:20]
@@ -188,10 +203,20 @@ class Vault:
             derive_key(self.passphrase, self._salt)
         )
         plaintext = _decrypt(self._enc_key, self._mac_key, raw[20:])
-        data = json.loads(plaintext.decode("utf-8"))
+        try:
+            data = json.loads(plaintext.decode("utf-8"))
+        except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+            raise ValueError(f"vault contents could not be decoded: {exc}") from exc
+        if "docs" not in data or not isinstance(data["docs"], list):
+            raise ValueError("vault is missing required 'docs' field")
         self._docs = [Document(**d) for d in data["docs"]]
 
     def save(self) -> None:
+        vault_dir = os.path.dirname(os.path.abspath(self.path))
+        if not os.path.isdir(vault_dir):
+            raise OSError(
+                f"vault directory does not exist: {vault_dir!r} -- create it first"
+            )
         plaintext = json.dumps(
             {"docs": [asdict(d) for d in self._docs]}, sort_keys=True
         ).encode("utf-8")
@@ -203,6 +228,13 @@ class Vault:
 
     # --- mutation --------------------------------------------------------
     def add(self, title: str, text: str, tags: Optional[List[str]] = None) -> Document:
+        title = title.strip() if title else ""
+        if not title:
+            raise ValueError("document title must not be empty")
+        if not isinstance(text, str):
+            raise TypeError(
+                f"document text must be a string, got {type(text).__name__}"
+            )
         doc_id = hashlib.sha256(
             (title + text + str(time.time())).encode("utf-8")
         ).hexdigest()[:12]
@@ -244,6 +276,10 @@ class Vault:
         return dot / (na * nb)
 
     def query(self, text: str, k: int = 5) -> List[Tuple[Document, float]]:
+        if not isinstance(k, int) or isinstance(k, bool):
+            raise TypeError(f"k must be an integer, got {type(k).__name__}")
+        if k < 1:
+            raise ValueError(f"k must be at least 1, got {k}")
         idf = self._idf()
         qvec = self._vector(_tokenize(text), idf)
         scored: List[Tuple[Document, float]] = []
@@ -270,6 +306,10 @@ def relevant(
     vault_path: str, passphrase: str, query_text: str, k: int = 5
 ) -> List[Dict]:
     """Return the k most relevant documents to query_text from the vault."""
+    if not isinstance(k, int) or isinstance(k, bool):
+        raise TypeError(f"k must be an integer, got {type(k).__name__}")
+    if k < 1:
+        raise ValueError(f"k must be at least 1, got {k}")
     vault = Vault(vault_path, passphrase)
     results = vault.query(query_text, k=k)
     return [
