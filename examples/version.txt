@@ -1,0 +1,3 @@
+$ recall-emit --version
+
+recall 0.1.0

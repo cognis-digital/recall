@@ -20,6 +20,66 @@ pip install cognis-recall
 recall scan .            # → prioritized findings in seconds
 ```
 
+
+<!-- cognis:example:start -->
+## 🔎 Example output
+
+Real, reproducible output from the tool — runs offline:
+
+```console
+$ recall-emit --version
+recall 0.1.0
+```
+
+```console
+$ recall-emit --help
+usage: recall [-h] [--version] [--format {table,json}] [--vault VAULT]
+              [--passphrase PASSPHRASE]
+              {relevant,add,audit} ...
+
+Privacy-first local RAG over personal data.
+
+positional arguments:
+  {relevant,add,audit}
+    relevant            retrieve most relevant documents
+    add                 add a document to the vault
+    audit               show / verify the audit log
+
+options:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit
+  --format {table,json}
+  --vault VAULT
+  --passphrase PASSPHRASE
+```
+
+> Blocks above are real `recall` output — reproduce them from a clone.
+
+**Sample result format** _(illustrative values — run on your own data for real findings):_
+
+```
+{
+"findings": [
+    {
+        "id": "1234567890",
+        "title": "Suspicious Network Traffic",
+        "description": "Potential malicious activity detected on port 443.",
+        "created_by": "John Doe",
+        "created_at": "2023-02-16T14:30:00Z"
+    },
+    {
+        "id": "2345678901",
+        "title": "Unusual File Access",
+        "description": "An unknown process accessed a sensitive file.",
+        "created_by": "Jane Smith",
+        "created_at": "2023-02-17T10:45:00Z"
+    }
+]
+}
+```
+
+<!-- cognis:example:end -->
+
 ## Usage — step by step
 
 1. **Install** (Python 3.9+):

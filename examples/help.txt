@@ -1,0 +1,20 @@
+$ recall-emit --help
+
+usage: recall [-h] [--version] [--format {table,json}] [--vault VAULT]
+              [--passphrase PASSPHRASE]
+              {relevant,add,audit} ...
+
+Privacy-first local RAG over personal data.
+
+positional arguments:
+  {relevant,add,audit}
+    relevant            retrieve most relevant documents
+    add                 add a document to the vault
+    audit               show / verify the audit log
+
+options:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit
+  --format {table,json}
+  --vault VAULT
+  --passphrase PASSPHRASE
